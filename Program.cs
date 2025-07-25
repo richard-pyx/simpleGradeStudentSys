@@ -31,7 +31,7 @@ public class Program
 				case "5":
 					return;
 				default:
-					Console.WriteLine("Invalid choice. Presse Enter to continue.");
+					Console.WriteLine("Invalid choice. Press Enter to continue.");
 					Console.ReadLine();
 					break;
 			}
@@ -48,16 +48,16 @@ public class Program
 		Console.WriteLine("3. Calculate average grades");
 		Console.WriteLine("4. Display all records");
 		Console.WriteLine("5. Exit");
-		Console.WriteLine("Choose an option (1-5): ");
+		Console.Write("\nChoose an option (1-5): ");
 		return Console.ReadLine();
 	}
 	
 	static void AddStudent()
 	{
-		Console.WriteLine("Enter student name: ");
+		Console.WriteLine("\nEnter student name: ");
 		string name = Console.ReadLine();
 		
-		Console.WriteLine("Enter student ID: ");
+		Console.WriteLine("\nEnter student ID: ");
 		string id = Console.ReadLine();
 		
 		// Add their respective name, id and create two new lists to store their grades and subjects.
@@ -88,14 +88,14 @@ public class Program
 		}
 		
 		// Select student
-		Console.Write("Ennter student number: ");
+		Console.Write("Enter student number: ");
 		// Take input and check if it is in a valid input range.
 		if (int.TryParse(Console.ReadLine(), out int index) && index >= 1 && index <= studentNames.Count)
 		{
-			Console.Write("Enter subject: ");
+			Console.Write("\nEnter subject: ");
 			string subject = Console.ReadLine();
 			
-			Console.Write("Enter grade (0-100): ");
+			Console.Write("\nEnter grade (0-100): ");
 			// Take the input and checks if it is a valid number and if it in range.
 			if (double.TryParse(Console.ReadLine(), out double grade) && grade >= 0 && grade <= 100)
 			{
@@ -114,19 +114,68 @@ public class Program
 		}
 		
 		// Return to menu
-		Console.WriteLine("Press Enter to continue.");
-        Console.ReadLine();
+		ReturnMenu();
 	
 	}
 	
 	static void CalculateAverages()
 	{
+		Console.WriteLine("Student Averages: ");
+		for (int i = 0; i < studentNames.Count; i++)
+		{	
+			// Store grades on a new list to calculate the average.
+			List<double> grades = studentsGrades[i];
+			// Check if it has grades, if it has, pass to the function to calculate average.
+			double average = grades.Count > 0 ? CalculateAverage(grades) : 0;
+			Console.WriteLine($"{studentNames[i]} ({studentIDs[i]}) - Average Grade: {average}");
+		}
+		ReturnMenu();
+	}
 	
+	// Calculate the average of a given grade list.
+	static double CalculateAverage(List<double> grades)
+	{
+		// Avoiding divided by zero
+		if (grades.Count == 0) 
+		{
+			return 0;
+		}
+		
+		double total = 0;
+		for (int i = 0; i < grades.Count; i++)
+		{
+			total = total + grades[i];
+		}
+		return  total / grades.Count;
 	}
 	
 	static void DisplayRecords()
 	{
-		
+		Console.WriteLine("\nAll Student Records");
+		for (int i = 0; i < studentNames.Count; i++)
+		{	
+			// Output the Student and ID 
+			Console.WriteLine($"\nStudent: {studentNames[i]} ({studentIDs[i]})");
+			if (studentsGrades[i].Count > 0)
+			{	
+				// Output each subject and their grade for the current student.
+				Console.WriteLine("Grades:");
+				for (int j = 0; j < studentsGrades[i].Count; j++)
+				{
+					Console.WriteLine($"	{studentsSubjects[i][j]}: {studentsGrades[i][j]}");
+				}
+			}
+			else
+			{
+				Console.WriteLine("No grades recorded.");
+			}
+		}
+		ReturnMenu();
 	}
-	
+
+	static void ReturnMenu()
+	{
+		Console.WriteLine("\nPress Enter to continue.");
+		Console.ReadLine();
+	}
 }
